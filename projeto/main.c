@@ -9,7 +9,7 @@ int main(){
 
     int vagas [FILEIRAS] [COLUNAS] = {0};
 
-    exibir_vagas (vagas);
+    
 
     return 0;
 }
