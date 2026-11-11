@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compilar Estacionamento",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-Wall",
+                "-Wextra",
+                "-g3",
+                "main.c",
+                "estacionamento.c",
+                "-o",
+                "output/main.exe"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/projeto"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
