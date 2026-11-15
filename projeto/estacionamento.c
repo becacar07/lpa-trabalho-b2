@@ -25,6 +25,12 @@ void zerar_mapa(int mapa[FILEIRAS][COLUNAS])
     }
 }
 
+int posicao_valida(int fileira, int coluna)
+{
+    return fileira >= 1 && fileira <= FILEIRAS &&
+           coluna >= 1 && coluna <= COLUNAS;
+}
+
 int normalizar_identificador(const char *entrada, char destino[TAM_IDENTIFICADOR + 1])
 {
     char temporario[TAM_IDENTIFICADOR + 1];
@@ -109,4 +115,82 @@ int ampliar_colecao(Colecao *colecao)
     colecao->itens = novo_bloco;
     colecao->capacidade = nova_capacidade;
     return 1;
+}
+
+int buscar_veiculo(const Colecao *colecao, const char *identificador)
+{
+    int i;
+
+    if (colecao == NULL || identificador == NULL) {
+        return -1;
+    }
+
+    for (i = 0; i < colecao->quantidade; i++) {
+        if (strcmp(colecao->itens[i].identificador, identificador) == 0) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+ResultadoInsercao inserir_veiculo(Colecao *colecao, int mapa[FILEIRAS][COLUNAS],
+                                  const Veiculo *novo)
+{
+    Veiculo registro;
+
+    if (colecao == NULL || colecao->itens == NULL || mapa == NULL || novo == NULL) {
+        return INSERCAO_DADOS_INVALIDOS;
+    }
+
+    if (colecao->quantidade >= TOTAL_VAGAS) {
+        return INSERCAO_LOTADO;
+    }
+
+    if (!normalizar_identificador(novo->identificador, registro.identificador) ||
+        !descricao_valida(novo->descricao) ||
+        !categoria_valida(novo->categoria)) {
+        return INSERCAO_DADOS_INVALIDOS;
+    }
+
+    if (buscar_veiculo(colecao, registro.identificador) != -1) {
+        return INSERCAO_DUPLICADO;
+    }
+
+    if (!posicao_valida(novo->fileira, novo->coluna)) {
+        return INSERCAO_POSICAO_INVALIDA;
+    }
+
+    if (mapa[novo->fileira - 1][novo->coluna - 1] != VAGA_LIVRE) {
+        return INSERCAO_VAGA_OCUPADA;
+    }
+
+    if (colecao->quantidade == colecao->capacidade) {
+        if (!ampliar_colecao(colecao)) {
+            return INSERCAO_FALHA_MEMORIA;
+        }
+    }
+
+    strcpy(registro.descricao, novo->descricao);
+    registro.categoria = novo->categoria;
+    registro.fileira = novo->fileira;
+    registro.coluna = novo->coluna;
+
+    colecao->itens[colecao->quantidade] = registro;
+    colecao->quantidade++;
+    mapa[registro.fileira - 1][registro.coluna - 1] = VAGA_OCUPADA;
+
+    return INSERCAO_OK;
+}
+
+void liberar_colecao(Colecao *colecao)
+{
+    if (colecao == NULL) {
+        return;
+    }
+
+    free(colecao->itens);
+    colecao->itens = NULL;
+    colecao->quantidade = 0;
+    colecao->capacidade = 0;
 }
