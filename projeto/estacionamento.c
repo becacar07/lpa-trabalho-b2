@@ -71,3 +71,42 @@ int categoria_valida(int categoria)
 {
     return categoria == CATEGORIA_CARRO || categoria == CATEGORIA_MOTO;
 }
+
+int inicializar_colecao(Colecao *colecao)
+{
+    if (colecao == NULL) {
+        return 0;
+    }
+
+    colecao->quantidade = 0;
+    colecao->itens = malloc(CAPACIDADE_INICIAL * sizeof(Veiculo));
+
+    if (colecao->itens == NULL) {
+        colecao->capacidade = 0;
+        return 0;
+    }
+
+    colecao->capacidade = CAPACIDADE_INICIAL;
+    return 1;
+}
+
+int ampliar_colecao(Colecao *colecao)
+{
+    Veiculo *novo_bloco;
+    int nova_capacidade;
+
+    if (colecao == NULL || colecao->itens == NULL || colecao->capacidade <= 0) {
+        return 0;
+    }
+
+    nova_capacidade = colecao->capacidade * 2;
+    novo_bloco = realloc(colecao->itens, (size_t)nova_capacidade * sizeof(Veiculo));
+
+    if (novo_bloco == NULL) {
+        return 0;
+    }
+
+    colecao->itens = novo_bloco;
+    colecao->capacidade = nova_capacidade;
+    return 1;
+}
