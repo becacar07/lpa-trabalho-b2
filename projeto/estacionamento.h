@@ -25,5 +25,8 @@ typedef struct {
 void exibir_vagas (int matriz [FILEIRAS][COLUNAS]);
 
 int normalizar_identificador(const char *entrada, char destino[TAM_IDENTIFICADOR + 1]);
+void zerar_mapa(int mapa[FILEIRAS][COLUNAS]);
+int descricao_valida(const char *descricao);
+int categoria_valida(int categoria);
 
 #endif

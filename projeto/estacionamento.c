@@ -14,6 +14,17 @@ void exibir_vagas (int matriz[FILEIRAS][COLUNAS]){
     }
 }
 
+void zerar_mapa(int mapa[FILEIRAS][COLUNAS])
+{
+    int i, j;
+
+    for (i = 0; i < FILEIRAS; i++) {
+        for (j = 0; j < COLUNAS; j++) {
+            mapa[i][j] = VAGA_LIVRE;
+        }
+    }
+}
+
 int normalizar_identificador(const char *entrada, char destino[TAM_IDENTIFICADOR + 1])
 {
     char temporario[TAM_IDENTIFICADOR + 1];
@@ -42,4 +53,21 @@ int normalizar_identificador(const char *entrada, char destino[TAM_IDENTIFICADOR
 
     strcpy(destino, temporario);
     return 1;
+}
+
+int descricao_valida(const char *descricao)
+{
+    size_t tamanho;
+
+    if (descricao == NULL) {
+        return 0;
+    }
+
+    tamanho = strlen(descricao);
+    return tamanho >= 1 && tamanho <= TAM_DESCRICAO;
+}
+
+int categoria_valida(int categoria)
+{
+    return categoria == CATEGORIA_CARRO || categoria == CATEGORIA_MOTO;
 }
