@@ -25,11 +25,15 @@ int ler_inteiro(void)
 {
     char linha[TAM_LINHA];
     int numero;
+    char sobra;
+
     ler_texto(linha, TAM_LINHA);
-    if (sscanf(linha, "%d", &numero) != 1) {
+
+    if (sscanf(linha, "%d %c", &numero, &sobra) != 1) {
         return -1;
     }
-    return numero; }
+    return numero;
+}
 void exibir_menu(void)
 {
     printf("\n===== ESTACIONAMENTO =====\n");
