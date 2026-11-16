@@ -46,6 +46,7 @@ int normalizar_identificador(const char *entrada, char destino[TAM_IDENTIFICADOR
 void zerar_mapa(int mapa[FILEIRAS][COLUNAS]);
 int descricao_valida(const char *descricao);
 int categoria_valida(int categoria);
+int posicao_valida(int fileira, int coluna);
 int inicializar_colecao(Colecao *colecao);
 int ampliar_colecao(Colecao *colecao);
 int buscar_veiculo(const Colecao *colecao, const char *identificador);
