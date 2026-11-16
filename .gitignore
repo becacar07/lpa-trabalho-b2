@@ -1,0 +1,6 @@
+# executaveis e objetos gerados na compilacao
+projeto/output/*
+!projeto/output/.gitkeep
+*.exe
+*.o
+/estacionamento
