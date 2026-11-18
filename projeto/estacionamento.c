@@ -218,3 +218,10 @@ void listar_veiculos(const Colecao *colecao)
         exibir_veiculo(&colecao->itens[i]);
     }
 }
+void mover_veiculo(Veiculo *veiculo, int mapa[FILEIRAS][COLUNAS], int fileira, int coluna)
+{
+    mapa[veiculo->fileira - 1][veiculo->coluna - 1] = VAGA_LIVRE;
+    mapa[fileira - 1][coluna - 1] = VAGA_OCUPADA;
+    veiculo->fileira = fileira;
+    veiculo->coluna = coluna;
+}

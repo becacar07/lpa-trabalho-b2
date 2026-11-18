@@ -170,6 +170,40 @@ void atualizar_veiculo(Colecao *colecao)
     exibir_veiculo(veiculo);
 }
 
+void trocar_vaga(Colecao *colecao, int mapa[FILEIRAS][COLUNAS])
+{
+    int fileira, coluna;
+    int indice = procurar_veiculo(colecao);
+
+    if (indice == -1) {
+        return;
+    }
+
+    Veiculo *veiculo = &colecao->itens[indice];
+    printf("Vaga atual: F%d/C%d\n", veiculo->fileira, veiculo->coluna);
+
+    printf("Nova fileira (1 a 4): ");
+    fileira = ler_inteiro();
+    printf("Nova coluna (1 a 5): ");
+    coluna = ler_inteiro();
+
+    if (!posicao_valida(fileira, coluna)) {
+        printf("Posição inválida! Nada foi alterado.\n");
+        return;
+    }
+    if (fileira == veiculo->fileira && coluna == veiculo->coluna) {
+        printf("O veículo já está na vaga F%d/C%d.\n", fileira, coluna);
+        return;
+    }
+    if (mapa[fileira - 1][coluna - 1] == VAGA_OCUPADA) {
+        printf("A vaga F%d/C%d está ocupada! Nada foi alterado.\n", fileira, coluna);
+        return;
+    }
+
+    mover_veiculo(veiculo, mapa, fileira, coluna);
+    printf("Veículo %s movido para a vaga F%d/C%d.\n", veiculo->identificador, fileira, coluna);
+}
+
 void exibir_menu(void)
 {
     printf("\n===== ESTACIONAMENTO =====\n");
@@ -217,7 +251,10 @@ int main()
             case 3:
                 atualizar_veiculo(&colecao);
                 break;
-            case 4: case 5:
+            case 4:
+                trocar_vaga(&colecao, vagas);
+                break;
+            case 5:
                 printf("Opção em construção.\n");
                 break;
             case 6:
