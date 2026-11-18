@@ -195,3 +195,45 @@ void liberar_colecao(Colecao *colecao)
     colecao->quantidade = 0;
     colecao->capacidade = 0;
 }
+
+void exibir_veiculo(const Veiculo *veiculo)
+{
+    printf("ID: %s | Descrição: %s | Categoria: %s | Vaga: F%d/C%d\n",
+           veiculo->identificador, veiculo->descricao,
+           veiculo->categoria == CATEGORIA_CARRO ? "Carro" : "Moto",
+           veiculo->fileira, veiculo->coluna);
+}
+
+void listar_veiculos(const Colecao *colecao)
+{
+    int i;
+
+    if (colecao->quantidade == 0) {
+        printf("Nenhum veículo cadastrado.\n");
+        return;
+    }
+
+    printf("Veículos cadastrados: %d\n", colecao->quantidade);
+    for (i = 0; i < colecao->quantidade; i++) {
+        exibir_veiculo(&colecao->itens[i]);
+    }
+}
+void mover_veiculo(Veiculo *veiculo, int mapa[FILEIRAS][COLUNAS], int fileira, int coluna)
+{
+    mapa[veiculo->fileira - 1][veiculo->coluna - 1] = VAGA_LIVRE;
+    mapa[fileira - 1][coluna - 1] = VAGA_OCUPADA;
+    veiculo->fileira = fileira;
+    veiculo->coluna = coluna;
+}
+void remover_veiculo(Colecao *colecao, int mapa[FILEIRAS][COLUNAS], int indice)
+{
+    int i;
+    Veiculo *veiculo = &colecao->itens[indice];
+
+    mapa[veiculo->fileira - 1][veiculo->coluna - 1] = VAGA_LIVRE;
+
+    for (i = indice; i < colecao->quantidade - 1; i++) {
+        colecao->itens[i] = colecao->itens[i + 1];
+    }
+    colecao->quantidade--;
+}

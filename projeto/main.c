@@ -102,6 +102,122 @@ void cadastrar_veiculo(Colecao *colecao, int mapa[FILEIRAS][COLUNAS])
     }
 }
 
+int procurar_veiculo(Colecao *colecao)
+{
+    char linha[TAM_LINHA];
+    char identificador[TAM_IDENTIFICADOR + 1];
+    int indice;
+
+    printf("Identificador do veículo: ");
+    ler_texto(linha, TAM_LINHA);
+
+    if (!normalizar_identificador(linha, identificador)) {
+        printf("Identificador inválido!\n");
+        return -1;
+    }
+
+    indice = buscar_veiculo(colecao, identificador);
+    if (indice == -1) {
+        printf("Veículo %s não encontrado.\n", identificador);
+    }
+    return indice;
+}
+
+void consultar_veiculo(Colecao *colecao)
+{
+    int indice = procurar_veiculo(colecao);
+
+    if (indice != -1) {
+        exibir_veiculo(&colecao->itens[indice]);
+    }
+}
+
+void atualizar_veiculo(Colecao *colecao)
+{
+    char linha[TAM_LINHA];
+    int categoria;
+    int indice = procurar_veiculo(colecao);
+
+    if (indice == -1) {
+        return;
+    }
+
+    Veiculo *veiculo = &colecao->itens[indice];
+    exibir_veiculo(veiculo);
+
+    printf("Nova descrição (Enter para manter): ");
+    ler_texto(linha, TAM_LINHA);
+    printf("Nova categoria (1 - carro, 2 - moto, 0 para manter): ");
+    categoria = ler_inteiro();
+
+    if (linha[0] != '\0' && !descricao_valida(linha)) {
+        printf("Descrição inválida! Nada foi alterado.\n");
+        return;
+    }
+    if (categoria != 0 && !categoria_valida(categoria)) {
+        printf("Categoria inválida! Nada foi alterado.\n");
+        return;
+    }
+
+    if (linha[0] != '\0') {
+        strcpy(veiculo->descricao, linha);
+    }
+    if (categoria != 0) {
+        veiculo->categoria = categoria;
+    }
+
+    printf("Veículo atualizado: ");
+    exibir_veiculo(veiculo);
+}
+
+void trocar_vaga(Colecao *colecao, int mapa[FILEIRAS][COLUNAS])
+{
+    int fileira, coluna;
+    int indice = procurar_veiculo(colecao);
+
+    if (indice == -1) {
+        return;
+    }
+
+    Veiculo *veiculo = &colecao->itens[indice];
+    printf("Vaga atual: F%d/C%d\n", veiculo->fileira, veiculo->coluna);
+
+    printf("Nova fileira (1 a 4): ");
+    fileira = ler_inteiro();
+    printf("Nova coluna (1 a 5): ");
+    coluna = ler_inteiro();
+
+    if (!posicao_valida(fileira, coluna)) {
+        printf("Posição inválida! Nada foi alterado.\n");
+        return;
+    }
+    if (fileira == veiculo->fileira && coluna == veiculo->coluna) {
+        printf("O veículo já está na vaga F%d/C%d.\n", fileira, coluna);
+        return;
+    }
+    if (mapa[fileira - 1][coluna - 1] == VAGA_OCUPADA) {
+        printf("A vaga F%d/C%d está ocupada! Nada foi alterado.\n", fileira, coluna);
+        return;
+    }
+
+    mover_veiculo(veiculo, mapa, fileira, coluna);
+    printf("Veículo %s movido para a vaga F%d/C%d.\n", veiculo->identificador, fileira, coluna);
+}
+
+void retirar_veiculo(Colecao *colecao, int mapa[FILEIRAS][COLUNAS])
+{
+    char identificador[TAM_IDENTIFICADOR + 1];
+    int indice = procurar_veiculo(colecao);
+
+    if (indice == -1) {
+        return;
+    }
+
+    strcpy(identificador, colecao->itens[indice].identificador);
+    remover_veiculo(colecao, mapa, indice);
+    printf("Veículo %s removido. Restam %d veículo(s).\n", identificador, colecao->quantidade);
+}
+
 void exibir_menu(void)
 {
     printf("\n===== ESTACIONAMENTO =====\n");
@@ -143,7 +259,22 @@ int main()
             case 1:
                 cadastrar_veiculo(&colecao, vagas);
                 break;
-            case 2: case 3: case 4: case 5: case 6: case 7: case 8:
+            case 2:
+                consultar_veiculo(&colecao);
+                break;
+            case 3:
+                atualizar_veiculo(&colecao);
+                break;
+            case 4:
+                trocar_vaga(&colecao, vagas);
+                break;
+            case 5:
+                retirar_veiculo(&colecao, vagas);
+                break;
+            case 6:
+                listar_veiculos(&colecao);
+                break;
+            case 7: case 8:
                 printf("Opção em construção.\n");
                 break;
             case 0:
