@@ -132,6 +132,44 @@ void consultar_veiculo(Colecao *colecao)
     }
 }
 
+void atualizar_veiculo(Colecao *colecao)
+{
+    char linha[TAM_LINHA];
+    int categoria;
+    int indice = procurar_veiculo(colecao);
+
+    if (indice == -1) {
+        return;
+    }
+
+    Veiculo *veiculo = &colecao->itens[indice];
+    exibir_veiculo(veiculo);
+
+    printf("Nova descrição (Enter para manter): ");
+    ler_texto(linha, TAM_LINHA);
+    printf("Nova categoria (1 - carro, 2 - moto, 0 para manter): ");
+    categoria = ler_inteiro();
+
+    if (linha[0] != '\0' && !descricao_valida(linha)) {
+        printf("Descrição inválida! Nada foi alterado.\n");
+        return;
+    }
+    if (categoria != 0 && !categoria_valida(categoria)) {
+        printf("Categoria inválida! Nada foi alterado.\n");
+        return;
+    }
+
+    if (linha[0] != '\0') {
+        strcpy(veiculo->descricao, linha);
+    }
+    if (categoria != 0) {
+        veiculo->categoria = categoria;
+    }
+
+    printf("Veículo atualizado: ");
+    exibir_veiculo(veiculo);
+}
+
 void exibir_menu(void)
 {
     printf("\n===== ESTACIONAMENTO =====\n");
@@ -176,7 +214,10 @@ int main()
             case 2:
                 consultar_veiculo(&colecao);
                 break;
-            case 3: case 4: case 5:
+            case 3:
+                atualizar_veiculo(&colecao);
+                break;
+            case 4: case 5:
                 printf("Opção em construção.\n");
                 break;
             case 6:
