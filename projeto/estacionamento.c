@@ -225,3 +225,15 @@ void mover_veiculo(Veiculo *veiculo, int mapa[FILEIRAS][COLUNAS], int fileira, i
     veiculo->fileira = fileira;
     veiculo->coluna = coluna;
 }
+void remover_veiculo(Colecao *colecao, int mapa[FILEIRAS][COLUNAS], int indice)
+{
+    int i;
+    Veiculo *veiculo = &colecao->itens[indice];
+
+    mapa[veiculo->fileira - 1][veiculo->coluna - 1] = VAGA_LIVRE;
+
+    for (i = indice; i < colecao->quantidade - 1; i++) {
+        colecao->itens[i] = colecao->itens[i + 1];
+    }
+    colecao->quantidade--;
+}

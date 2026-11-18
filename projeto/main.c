@@ -204,6 +204,20 @@ void trocar_vaga(Colecao *colecao, int mapa[FILEIRAS][COLUNAS])
     printf("Veículo %s movido para a vaga F%d/C%d.\n", veiculo->identificador, fileira, coluna);
 }
 
+void retirar_veiculo(Colecao *colecao, int mapa[FILEIRAS][COLUNAS])
+{
+    char identificador[TAM_IDENTIFICADOR + 1];
+    int indice = procurar_veiculo(colecao);
+
+    if (indice == -1) {
+        return;
+    }
+
+    strcpy(identificador, colecao->itens[indice].identificador);
+    remover_veiculo(colecao, mapa, indice);
+    printf("Veículo %s removido. Restam %d veículo(s).\n", identificador, colecao->quantidade);
+}
+
 void exibir_menu(void)
 {
     printf("\n===== ESTACIONAMENTO =====\n");
@@ -255,7 +269,7 @@ int main()
                 trocar_vaga(&colecao, vagas);
                 break;
             case 5:
-                printf("Opção em construção.\n");
+                retirar_veiculo(&colecao, vagas);
                 break;
             case 6:
                 listar_veiculos(&colecao);
