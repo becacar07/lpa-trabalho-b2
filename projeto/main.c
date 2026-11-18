@@ -102,6 +102,36 @@ void cadastrar_veiculo(Colecao *colecao, int mapa[FILEIRAS][COLUNAS])
     }
 }
 
+int procurar_veiculo(Colecao *colecao)
+{
+    char linha[TAM_LINHA];
+    char identificador[TAM_IDENTIFICADOR + 1];
+    int indice;
+
+    printf("Identificador do veículo: ");
+    ler_texto(linha, TAM_LINHA);
+
+    if (!normalizar_identificador(linha, identificador)) {
+        printf("Identificador inválido!\n");
+        return -1;
+    }
+
+    indice = buscar_veiculo(colecao, identificador);
+    if (indice == -1) {
+        printf("Veículo %s não encontrado.\n", identificador);
+    }
+    return indice;
+}
+
+void consultar_veiculo(Colecao *colecao)
+{
+    int indice = procurar_veiculo(colecao);
+
+    if (indice != -1) {
+        exibir_veiculo(&colecao->itens[indice]);
+    }
+}
+
 void exibir_menu(void)
 {
     printf("\n===== ESTACIONAMENTO =====\n");
@@ -143,7 +173,16 @@ int main()
             case 1:
                 cadastrar_veiculo(&colecao, vagas);
                 break;
-            case 2: case 3: case 4: case 5: case 6: case 7: case 8:
+            case 2:
+                consultar_veiculo(&colecao);
+                break;
+            case 3: case 4: case 5:
+                printf("Opção em construção.\n");
+                break;
+            case 6:
+                listar_veiculos(&colecao);
+                break;
+            case 7: case 8:
                 printf("Opção em construção.\n");
                 break;
             case 0:

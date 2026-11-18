@@ -54,4 +54,7 @@ ResultadoInsercao inserir_veiculo(Colecao *colecao, int mapa[FILEIRAS][COLUNAS],
 const Veiculo *novo);
 void liberar_colecao(Colecao *colecao);
 
+void exibir_veiculo(const Veiculo *veiculo);
+void listar_veiculos(const Colecao *colecao);
+
 #endif
