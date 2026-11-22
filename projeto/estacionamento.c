@@ -4,15 +4,23 @@
 
 #include "estacionamento.h"
 
-void exibir_vagas (int matriz[FILEIRAS][COLUNAS]){
-    for (int i = 0; i < FILEIRAS; i++)
-    {
-        for (int j = 0; j < COLUNAS; j++)
-        {
-            printf ("[%d]  ", matriz[i][j]);
+void exibir_vagas(int matriz[FILEIRAS][COLUNAS])
+{
+    int i, j;
+
+    printf("\n      C1 C2 C3 C4 C5\n");
+    for (i = 0; i < FILEIRAS; i++) {
+        printf("F%d    ", i + 1);
+        for (j = 0; j < COLUNAS; j++) {
+            if (matriz[i][j] == VAGA_OCUPADA) {
+                printf(" X ");
+            } else {
+                printf(" . ");
+            }
         }
-    printf ("\n");
+        printf("\n");
     }
+    printf("Legenda: X = ocupada; . = livre\n");
 }
 
 void zerar_mapa(int mapa[FILEIRAS][COLUNAS])
@@ -218,6 +226,7 @@ void listar_veiculos(const Colecao *colecao)
         exibir_veiculo(&colecao->itens[i]);
     }
 }
+
 void mover_veiculo(Veiculo *veiculo, int mapa[FILEIRAS][COLUNAS], int fileira, int coluna)
 {
     mapa[veiculo->fileira - 1][veiculo->coluna - 1] = VAGA_LIVRE;
@@ -225,6 +234,7 @@ void mover_veiculo(Veiculo *veiculo, int mapa[FILEIRAS][COLUNAS], int fileira, i
     veiculo->fileira = fileira;
     veiculo->coluna = coluna;
 }
+
 void remover_veiculo(Colecao *colecao, int mapa[FILEIRAS][COLUNAS], int indice)
 {
     int i;

@@ -274,7 +274,10 @@ int main()
             case 6:
                 listar_veiculos(&colecao);
                 break;
-            case 7: case 8:
+            case 7:
+                exibir_vagas(vagas);
+                break;
+            case 8:
                 printf("Opção em construção.\n");
                 break;
             case 0:
