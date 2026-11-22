@@ -59,4 +59,7 @@ void listar_veiculos(const Colecao *colecao);
 void mover_veiculo(Veiculo *veiculo, int mapa[FILEIRAS][COLUNAS], int fileira, int coluna);
 void remover_veiculo(Colecao *colecao, int mapa[FILEIRAS][COLUNAS], int indice);
 
+int contar_vagas_ocupadas(int mapa[FILEIRAS][COLUNAS]);
+void exibir_relatorio(const Colecao *colecao, int mapa[FILEIRAS][COLUNAS]);
+
 #endif

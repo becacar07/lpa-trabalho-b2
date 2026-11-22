@@ -278,7 +278,7 @@ int main()
                 exibir_vagas(vagas);
                 break;
             case 8:
-                printf("Opção em construção.\n");
+                exibir_relatorio(&colecao, vagas);
                 break;
             case 0:
                 break;
