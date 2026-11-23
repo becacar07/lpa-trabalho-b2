@@ -4,15 +4,23 @@
 
 #include "estacionamento.h"
 
-void exibir_vagas (int matriz[FILEIRAS][COLUNAS]){
-    for (int i = 0; i < FILEIRAS; i++)
-    {
-        for (int j = 0; j < COLUNAS; j++)
-        {
-            printf ("[%d]  ", matriz[i][j]);
+void exibir_vagas(int matriz[FILEIRAS][COLUNAS])
+{
+    int i, j;
+
+    printf("\n      C1 C2 C3 C4 C5\n");
+    for (i = 0; i < FILEIRAS; i++) {
+        printf("F%d    ", i + 1);
+        for (j = 0; j < COLUNAS; j++) {
+            if (matriz[i][j] == VAGA_OCUPADA) {
+                printf(" X ");
+            } else {
+                printf(" . ");
+            }
         }
-    printf ("\n");
+        printf("\n");
     }
+    printf("Legenda: X = ocupada; . = livre\n");
 }
 
 void zerar_mapa(int mapa[FILEIRAS][COLUNAS])
@@ -218,6 +226,7 @@ void listar_veiculos(const Colecao *colecao)
         exibir_veiculo(&colecao->itens[i]);
     }
 }
+
 void mover_veiculo(Veiculo *veiculo, int mapa[FILEIRAS][COLUNAS], int fileira, int coluna)
 {
     mapa[veiculo->fileira - 1][veiculo->coluna - 1] = VAGA_LIVRE;
@@ -225,6 +234,7 @@ void mover_veiculo(Veiculo *veiculo, int mapa[FILEIRAS][COLUNAS], int fileira, i
     veiculo->fileira = fileira;
     veiculo->coluna = coluna;
 }
+
 void remover_veiculo(Colecao *colecao, int mapa[FILEIRAS][COLUNAS], int indice)
 {
     int i;
@@ -236,4 +246,50 @@ void remover_veiculo(Colecao *colecao, int mapa[FILEIRAS][COLUNAS], int indice)
         colecao->itens[i] = colecao->itens[i + 1];
     }
     colecao->quantidade--;
+}
+
+int contar_vagas_ocupadas(int mapa[FILEIRAS][COLUNAS])
+{
+    int i, j;
+    int ocupadas = 0;
+
+    for (i = 0; i < FILEIRAS; i++) {
+        for (j = 0; j < COLUNAS; j++) {
+            if (mapa[i][j] == VAGA_OCUPADA) {
+                ocupadas++;
+            }
+        }
+    }
+    return ocupadas;
+}
+
+void exibir_relatorio(const Colecao *colecao, int mapa[FILEIRAS][COLUNAS])
+{
+    int i;
+    int carros = 0;
+    int motos = 0;
+    int ocupadas = contar_vagas_ocupadas(mapa);
+    float percentual = ocupadas * 100.0 / TOTAL_VAGAS;
+
+    for (i = 0; i < colecao->quantidade; i++) {
+        if (colecao->itens[i].categoria == CATEGORIA_CARRO) {
+            carros++;
+        } else {
+            motos++;
+        }
+    }
+
+    printf("\n===== RELATÓRIO =====\n");
+    printf("Total de vagas: %d\n", TOTAL_VAGAS);
+    printf("Vagas ocupadas: %d\n", ocupadas);
+    printf("Vagas livres: %d\n", TOTAL_VAGAS - ocupadas);
+    printf("Ocupação: %.2f%%\n", percentual);
+    printf("Carros: %d\n", carros);
+    printf("Motos: %d\n", motos);
+
+    if (ocupadas == colecao->quantidade) {
+        printf("Mapa e lista de veículos conferem (%d registros).\n", colecao->quantidade);
+    } else {
+        printf("ERRO: o mapa tem %d vagas ocupadas, mas a lista tem %d veículos!\n", ocupadas, colecao->quantidade);
+    }
 }
